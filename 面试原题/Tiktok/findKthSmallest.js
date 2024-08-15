@@ -46,7 +46,7 @@ function findKthSmallest(nums1, nums2, k) {
     }
 }
 
-const nums1 = [-5, -3, -1, 1];
-const nums2 = [-2, 0, 3, 4, 5];
-const k = 6;
+const nums1 = [-2, -1, 3, 5, 6, 8];
+const nums2 = [0, 1, 2, 5, 9];
+const k = 4;
 console.log(findKthSmallest(nums1, nums2, k));
