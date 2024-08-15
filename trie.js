@@ -1,57 +1,40 @@
-var Trie = function() {
-    this.children = {};
-    this.isEnd = false;
-};
-
-/** 
- * @param {string} word
- * @return {void}
- */
-Trie.prototype.insert = function(word) {
-    let node = this.children;
-    for (const ch of word) {
-        if (!node[ch]) {
-            node[ch] = new Trie();
-        }
-        node = node[ch];
+class Trie {
+    constructor() {
+        this.children = {};  // 存储子节点
+        this.isEnd = false;  // 标记是否是单词的结尾
     }
-    node.isEnd = true;
-};
 
-/** 
- * @param {string} word
- * @return {boolean}
- */
-Trie.prototype.search = function(word) {
-    let node = this.children;
-    for (const char of word) {
-        if (!node[char]) {
-            return false;
+    insert(word) {
+        //将当前的 Trie 根节点赋值给 node 变量，用于遍历 Trie 树结构。
+        let node = this;
+        for (const char of word) {
+            if (!node.children[char]) {
+                node.children[char] = new Trie();  // 如果不存在这个字符，创建新节点
+            }
+            node = node.children[char];  // 移动到下一个节点
         }
-        node = node[char];
+        node.isEnd = true;  // 标记这个节点为单词结尾
     }
-    return node.isEnd;
-};
 
-/** 
- * @param {string} prefix
- * @return {boolean}
- */
-Trie.prototype.startsWith = function(prefix) {
-    let node = this.children;
-    for (const char of prefix) {
-        if (!node[char]) {
-            return false;
+    search(word) {
+        let node = this;
+        for (const char of word) {
+            if (!node.children[char]) {
+                return false;  // 如果中途找不到字符，返回 false
+            }
+            node = node.children[char];  // 移动到下一个节点
         }
-        node = node[char];
+        return node.isEnd;  // 最后检查是否是完整单词的结尾
     }
-    return true;
-};
 
-/** 
- * Your Trie object will be instantiated and called as such:
- * var obj = new Trie()
- * obj.insert(word)
- * var param_2 = obj.search(word)
- * var param_3 = obj.startsWith(prefix)
- */
+    startsWith(prefix) {
+        let node = this;
+        for (const char of prefix) {
+            if (!node.children[char]) {
+                return false;  // 如果中途找不到字符，返回 false
+            }
+            node = node.children[char];  // 移动到下一个节点
+        }
+        return true;  // 如果所有字符都存在，则返回 true
+    }
+}
