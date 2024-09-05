@@ -1,39 +1,56 @@
-function reverseKGroup(head, k) {
+var reverseKGroup = function(head, k) {
     if (!head || k === 1) return head;
 
-    // 创建一个虚拟头节点，方便处理头节点的翻转
-    let dummy = new ListNode(0);
-    dummy.next = head;
-
-    let curr = dummy, nex = dummy, pre = dummy;
-    let count = 0;
-
-    // 计算链表的长度
-    while (curr.next) {
-        curr = curr.next;
-        count++;
+    // 计算链表总长度
+    let length = 0;
+    let node = head;
+    while (node) {
+        length++;
+        node = node.next;
     }
 
-    // 只要剩余节点数大于等于 k 就进行翻转
-    while (count >= k) {
-        curr = pre.next;
-        nex = curr.next;
+    // 定义虚拟头节点
+    const dummy = new ListNode(0);
+    dummy.next = head;
 
-        // 翻转 k 个节点
-        for (let i = 1; i < k; i++) {
-            curr.next = nex.next;
-            nex.next = pre.next;
-            pre.next = nex;
-            nex = curr.next;
+    let prevGroupEnd = dummy;
+
+    // 每次处理 k 个节点
+    while (length >= k) {
+        let groupStart = prevGroupEnd.next;
+        let groupEnd = prevGroupEnd;
+
+        // 移动到当前组的末尾节点
+        for (let i = 0; i < k; i++) {
+            groupEnd = groupEnd.next;
         }
 
-        // 移动 pre 指针到翻转后的部分末尾
-        pre = curr;
-        count -= k;
+        const nextGroupStart = groupEnd.next;
+
+        // 反转当前组
+        let prev = null;
+        let curr = groupStart;
+        while (curr !== nextGroupStart) {
+            let next = curr.next;
+            curr.next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        // 连接反转后的部分
+        prevGroupEnd.next = groupEnd;  // 连接前一部分到当前组的反转后部分
+        groupStart.next = nextGroupStart;  // 连接当前组的尾部到下一部分
+
+        // 更新 prevGroupEnd，指向当前组的末尾
+        prevGroupEnd = groupStart;
+
+        // 更新链表的剩余长度
+        length -= k;
     }
 
     return dummy.next;
-}
+};
+
 /**
  * 虚拟头节点：
 
