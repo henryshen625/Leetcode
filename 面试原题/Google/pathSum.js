@@ -1,3 +1,4 @@
+// 1.  二叉树的从根节点到叶子结点最大路径
 function binaryTreeMaxPath(root) {
     let result = -Infinity;
     
@@ -21,4 +22,26 @@ function binaryTreeMaxPath(root) {
     
     dfs(root, 0);
     return result;
+}
+
+//2. leetcode 124
+
+function maxPathSum(root) {
+    let maxSum = -Infinity;
+    const findMax = (root) => {
+        if (root === null) {
+            return 0;
+        }
+        const left = findMax(root.left);
+        const right = findMax(root.right);
+        
+        const innerMAX = root.val + left + right;
+        maxSum = Math.max(maxSum, innerMAX);
+
+        const outMax = root.val + Math.max(left, right, 0);
+
+        return outMax < 0 ? 0 : outMax;
+    }
+    findMax(root);
+    return maxSum;
 }
