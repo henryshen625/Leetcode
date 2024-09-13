@@ -12,6 +12,7 @@ function search(nums, target) {
         // 判断哪一部分是有序的
         if (nums[left] <= nums[mid]) {
             // 左半部分是有序的
+            // <= 是因为不能忽略nums[left] target的情况
             if (nums[left] <= target && target < nums[mid]) {
                 // 如果目标值在有序的左半部分
                 right = mid - 1;

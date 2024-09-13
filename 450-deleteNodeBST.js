@@ -11,31 +11,39 @@
  * @param {number} key
  * @return {TreeNode}
  */
- var deleteNode = function(root, key) {
-    if (root === null) {
+function deleteNode (root, key) {
+    if (root === null) { 
         return null;
     }
-    if (root.val === key) {
-        if (root.left === null && root.right === null) {
-            return null;
-        } else if (root.left !== null && root.right === null) {
+    if (root.val < key) {
+        root.right = deleteNode(root.right, key);
+    } else if (root.val > key) {
+        root.left = deleteNode(root.left, key);
+    } else {
+        // if (root.left === null && root.right === null) {
+        //     return null;
+        // }
+        if (root.left === null) {
+            return root.right;
+        } else if (root.right === null) {
             return root.left;
-        } else if (root.right !== null && root.left === null) {
-            return root.right;
         } else {
-            let current = root.right;
-            while (current.left !== null) {
-                current = current.left;
-            }
-            current.left = root.left;
-            return root.right;
+            // let current = root.right;
+            // while (current.left) {
+            //     current = current.left;
+            // }
+            // current.left = root.left;
+            // return root.right;
+            root.val = findMin(root.right);
+            root.right = deleteNode(root.right, root.val);
         }
     }
-    if (key < root.val) {
-        root.left = deleteNode(root.left, key);
-    }
-    if (key > root.val) {
-        root.right = deleteNode(root.right, key);
-    } 
     return root;
-};
+}
+
+function findMin(node) {
+    while (node.left) {
+        node = node.left;
+    }
+    return node.val;
+}
