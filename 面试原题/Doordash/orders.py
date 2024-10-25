@@ -54,7 +54,7 @@ def process_orders(orders):
     return processed_sequence
 
 # 示例测试
-orders = [3, 1, 5, 4, 2]
+orders = [30,10,50,40,20,70,15,16]
 result = process_orders(orders)
 print(result)  # 输出: [3, 5, 4, 2, 1]
 
