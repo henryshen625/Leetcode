@@ -1,5 +1,5 @@
 import heapq;
-
+# lc1834
 def getOrder(tasks):
         n = len(tasks)
         indices = list(range(n))

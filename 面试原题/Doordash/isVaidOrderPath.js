@@ -35,3 +35,5 @@ function isValidOrderPath(orders) {
     }
     return pickSet.size === dropSet.size;
 }
+
+//Given an integer representing number of orders, print all possible valid order paths 
