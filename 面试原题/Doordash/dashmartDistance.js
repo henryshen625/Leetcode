@@ -45,7 +45,6 @@ const locationBoard = [
 ];
 
 const newBoard = distanceToNearstGate(locationBoard);
-console.log(newBoard);
 const locationList = [[2,2], [4,0], [0,4], [2,6]];
 const answer = locationList.map(location => newBoard[location[0]][location[1]].charCodeAt(0) - 'D'.charCodeAt(0));
 console.log(answer);

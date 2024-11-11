@@ -6,34 +6,37 @@
 
 // the numeric code for time should be in 24hour format "mon 10:05 pm" --> 12205
 // when incrementing, you need to round the input time to the nearest 5th min. For eg. if start = 10:03, then output should start from 10:05
-
 class Time {
-    constructor(day, hour, min, am) {
+    constructor(day, hour, min) {
         this.day = day;
         this.hour = hour;
         this.min = min;
-        this.am = am;
     }
 
+    // 增加分钟数，并确保时间在 24 小时制内
     add(mins) {
-        this.hour += (Math.floor((this.min + mins) / 60)) % 24;
-        this.min = (this.min + mins) % 60;
-        if (this.hour === 12 && this.min === 0) {
-            this.am = !this.am;
-            if (this.am) {
-                this.day += 1;
-            }
-        } else if (this.hour >= 13) {
-            this.hour = this.hour % 12;
+        this.min += mins;
+
+        // 处理分钟进位
+        if (this.min >= 60) {
+            this.hour += Math.floor(this.min / 60);
+            this.min = this.min % 60;
+        }
+
+        // 处理小时制超过 24 的情况
+        if (this.hour >= 24) {
+            this.hour = this.hour % 24;
+            this.day = (this.day % 7) + 1; // 转换到下一天，且循环到周一
         }
     }
 
     equal(t1) {
-        return this.day === t1.day && this.hour === t1.hour && this.min === t1.min && this.am === t1.am;
+        return this.day === t1.day && this.hour === t1.hour && this.min === t1.min;
     }
 
+    // 获取 24 小时制的数值格式
     getNumeric() {
-        return(((this.day * 100) + this.hour) * 100) + this.min;
+        return (((this.day * 100) + this.hour) * 100) + this.min;
     }
 }
 
@@ -45,20 +48,41 @@ class TimeIntervals {
     }
 
     getTimeIntervals(start, end) {
+        this.intervals = []; // 清空之前的间隔
         let startTime = this.getTime(start);
-        console.log(startTime);
         let endTime = this.getTime(end);
-        while (!startTime.equal(endTime)) {
-            startTime.add(this.mins);
-            this.intervals.push(startTime.getNumeric());
+
+        // 处理开始时间四舍五入到最近的 5 分钟
+        if (startTime.min % 5 !== 0) {
+            startTime.min = Math.ceil(startTime.min / 5) * 5;
+            if (startTime.min === 60) {
+                startTime.min = 0;
+                startTime.hour += 1;
+            }
         }
+
+        while (!startTime.equal(endTime)) {
+            this.intervals.push(startTime.getNumeric());
+            startTime.add(this.mins);
+        }
+
         console.log('time intervals:', this.intervals);
     }
 
     getTime(t1) {
-        const split = t1.split(' ');
-        const hrMin = split[1].split(':');
-        return new Time(this.mapDays.get(split[0]), parseInt(hrMin[0]), parseInt(hrMin[1]), 'am' === split[2]);
+        const [day, time, period] = t1.split(' ');
+        const [hour, min] = time.split(':').map(Number);
+        let hour24 = hour;
+
+        // 将 AM/PM 转换为 24 小时制
+        if (period.toLowerCase() === 'pm' && hour !== 12) {
+            hour24 += 12;
+        }
+        if (period.toLowerCase() === 'am' && hour === 12) {
+            hour24 = 0;
+        }
+
+        return new Time(this.mapDays.get(day.toLowerCase()), hour24, min, period.toLowerCase() === 'am');
     }
 
     getMapDays() {
@@ -74,4 +98,4 @@ class TimeIntervals {
 
 const ti = new TimeIntervals(5); 
 ti.getMapDays();
-ti.getTimeIntervals("monday 11:00 am", "monday 1:00 pm");
+ti.getTimeIntervals("monday 10:03 pm", "monday 1:00 pm"); 

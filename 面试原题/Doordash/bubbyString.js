@@ -17,11 +17,12 @@ var buddyStrings = function(s, goal) {
         }
     }
     let ok = false;
+    
     for (let i = 0; i < 26; i++) {
         if (a[i] !== b[i]) return false;
         if (a[i] > 1) ok = true;
     }
-
+    //1. 如果刚好有两个地方不同 2。 如果两个字符一样且有多余的位置进行交换ab-> ab false aa -> aa true
     return sum === 2 || (sum === 0 && ok);
 };
 

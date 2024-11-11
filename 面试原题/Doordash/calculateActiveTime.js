@@ -36,7 +36,6 @@ function calculateActiveTime(inputArray) {
             totalTime = timeInMin - startTime;
         }
     })
-    console.log(idleTime);
     return totalTime - idleTime;
 }
 
